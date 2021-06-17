@@ -5,8 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from './app/screens/home';
 import GarageSaleMap from './app/screens/garage-sale-map';
 import CreateGarageSale from './app/screens/create-garage-sale';
+import User from './app/screens/user'
 
-const App = () => {
+export default function App() {
 
   const Stack = createStackNavigator();
   
@@ -15,8 +16,7 @@ const App = () => {
     dark: false,
     colors: {
       ...DefaultTheme.colors,
-      primary: '#EEE',
-      background: '#72A0C1'
+      background: '#FFF'
     }
   };
 
@@ -27,6 +27,7 @@ const App = () => {
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Maps" component={GarageSaleMap} />
           <Stack.Screen name="Create" component={CreateGarageSale} />
+          <Stack.Screen name="User" component={User} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>
@@ -39,5 +40,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });

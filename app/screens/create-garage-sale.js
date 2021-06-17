@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 const CreateGarageSale = ({navigate, route}) => {
-
+	return (
+		<View></View>
+	)
 };
 
 const styles = StyleSheet.create({
