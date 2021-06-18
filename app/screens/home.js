@@ -4,7 +4,7 @@ import { Button, Icon } from 'react-native-elements';
 import { initFirebase } from '../helpers/firebase-helper';
 import imageMap from '../../assets/assets';
 
-const Home = ({navigation, route}) => {
+const Home = ({ navigation }) => {
 
 	useEffect(() => {
 		// Setup Navigation
@@ -17,7 +17,7 @@ const Home = ({navigation, route}) => {
 			headerRightContainerStyle: {
 				paddingRight: 12
 			}
-		})
+		});
 
 		// Setup firebase
 		try {
@@ -39,7 +39,7 @@ const Home = ({navigation, route}) => {
 					onPress={() => navigation.push('Maps')} />
 				<Button
 					title="Upload a garage sale"
-					onPress={() => navigation.push('Create')} style={styles.actionButton} />
+					onPress={() => navigation.push('Create')} />
 			</View>
 		</SafeAreaView>
 	);

@@ -8,7 +8,7 @@ const User = ({navigation, route}) => {
 
 	// TODO: Need to reconsider how to manage auth.
 	useEffect(() => {
-		getDataByKey(saveUser, FEATURES.USER, )
+		getDataByKey(saveUser, FEATURES.USER, "test");
 
 	}, []);
 
