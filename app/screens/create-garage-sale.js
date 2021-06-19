@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Input, Icon, Button, CheckBox } from 'react-native-elements';
-import { writeData } from '../helpers/firebase-helper';
+import { FEATURES } from '../helpers/constants';
+import { getCurrentUser, writeData } from '../helpers/firebase-helper';
 import { getLocationDetails } from '../helpers/google-maps-helper';
 
 const CreateGarageSale = ({ navigation }) => {
@@ -16,6 +17,11 @@ const CreateGarageSale = ({ navigation }) => {
 	const [homeDecoration, setHomeDecoration] = useState(false);
 	const [kitchen, setKitchen] = useState(false);
 	const [electronics, setElectronics] = useState(false);
+
+	// Error
+	const [titleError, setTitleError] = useState(errorStyles.normal);
+	const [descriptionError, setDescriptionError] = useState(errorStyles.normal);
+	const [addressError, setAddressError] = useState(errorStyles.normal);
 
 	useEffect(() => {
 		// Setup Navigation
@@ -32,83 +38,130 @@ const CreateGarageSale = ({ navigation }) => {
 	}, []);
 
 	const submit = () => {
-		console.log({
-			title: title,
-			description: description,
-			latitude: 42.938558,
-			longitude: -86.1455,
-			baby: baby,
-			boyMen: boyMen,
-			girlWomen: girlWomen,
-			homeDecoration: homeDecoration,
-			kitchen: kitchen,
-			electronics: electronics
-		});
-
-		// getLocationDetails(submitCallback, address)
+		if (isValidSubmit()) {
+			getLocationDetails(submitCallback, address)
+		}
 	};
 
-	const submitCallback = (data) => {
-		// TODO: Get current user's username
-		const currentDate = Date.now();
-		writeData(FEATURES, `${currentDate}`, {
-			title: title,
-			description: description,
-			latitude: 42.938558,
-			longitude: -86.1455,
-			created: currentDate
-		});
+	const isValidSubmit = () => {
+		let isValid = true;
+
+		if (title === undefined || title === '') {
+			setTitleError(errorStyles.error);
+			isValid = false;
+		} else {
+			setTitleError(errorStyles.normal);
+		}
+
+		if (description === undefined || description === '') {
+			setDescriptionError(errorStyles.error);
+			isValid = false;
+		} else {
+			setDescriptionError(errorStyles.normal);
+		}
+
+		if (address === undefined || address === '') {
+			setAddressError(errorStyles.error);
+			isValid = false;
+		} else {
+			setAddressError(errorStyles.normal);
+		}
+
+		return isValid;
+	}
+
+	const submitCallback = (isSuccessful, data) => {
+		if (isSuccessful) {
+
+			const currentUser = getCurrentUser();
+			const currentUsername = currentUser ? currentUser.email : 'anonymous' ;
+
+			const sale = {
+				title: title,
+				description: description,
+				latitude: data.results[0].geometry.location.lat,
+				longitude: data.results[0].geometry.location.lng,
+				address: address,
+				baby: baby,
+				boyMen: boyMen,
+				girlWomen: girlWomen,
+				homeDecoration: homeDecoration,
+				kitchen: kitchen,
+				electronics: electronics,
+				user: currentUsername
+			};
+
+			const currentDate = Date.now();
+			writeData(FEATURES.GARAGE_SALES, `${currentDate}-${currentUsername}`, sale);
+			Alert.alert(
+				'Success!',
+				`Other users should be able to see you garage now at: ${address}, thanks!.`,
+				[{ 
+					text: "Cancel", 
+					style: "cancel",
+					onPress: () => navigation.goBack()
+				}]
+			);
+		} else {
+			Alert.alert(
+				'Alert!',
+				`Sorry, address: '${address}' is not valid, please try again.`,
+				[{ text: "Cancel", style: "cancel" }]
+			);
+		}
 	};
 
 	return (
 		<View style={styles.container}>
 			<Input
 				placeholder='Title'
-				onChangeText={setTitle} />
+				value={title}
+				onChangeText={setTitle}
+				errorStyle={titleError}
+				errorMessage='Title is required' />
 			<Input
 				placeholder='Description'
-				onChangeText={setDescription} />
+				value={description}
+				onChangeText={setDescription}
+				errorStyle={descriptionError}
+				errorMessage='Description is required' />
 			<Input
 				placeholder='Address'
-				onChangeText={setAddress} />
+				value={address}
+				onChangeText={setAddress}
+				errorStyle={addressError}
+				errorMessage='Address is required' />
 			<View style={styles.checkboxContainer}>
 				<CheckBox
-					style={styles.checkbox}
 					title='Baby'
 					checked={baby}
 					onPress={() => setBaby(!baby)} />
 				<CheckBox
-					style={styles.checkbox}
 					title='Boy / Men'
 					checked={boyMen}
 					onPress={() => setBoyMen(!boyMen)} />
 			</View>
 			<View style={styles.checkboxContainer}>
 				<CheckBox
-					style={styles.checkbox}
 					title='Girl / Women'
 					checked={girlWomen}
 					onPress={() => setGirlWomen(!girlWomen)} />
 				<CheckBox
-					style={styles.checkbox}
 					title='Home Decor'
 					checked={homeDecoration}
 					onPress={() => setHomeDecoration(!homeDecoration)} />
 			</View>
 			<View style={styles.checkboxContainer}>
 				<CheckBox
-					style={styles.checkbox}
 					title='Kitchen'
 					checked={kitchen}
 					onPress={() => setKitchen(!kitchen)} />
 				<CheckBox
-					style={styles.checkbox}
 					title='Electronics'
 					checked={electronics} 
 					onPress={() => setElectronics(!electronics)} />
 			</View>
 			<Button
-				style={{position: 'absolute', bottom: 0}}
 				title="Submit"
 				onPress={submit} />
 		</View>
@@ -123,9 +176,15 @@ const styles = StyleSheet.create({
 	checkboxContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-evenly'
+	}
+});
+
+const errorStyles = StyleSheet.create({
+	error: {
+		color: 'red'
 	},
-	checkbox: {
-		width: 300
+	normal: {
+		color: 'white'
 	}
 });
 

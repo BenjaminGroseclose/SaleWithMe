@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -6,11 +6,14 @@ import Home from './app/screens/home';
 import GarageSaleMap from './app/screens/garage-sale-map';
 import CreateGarageSale from './app/screens/create-garage-sale';
 import User from './app/screens/user'
+import SignUp from './app/screens/sign-up';
+import Login from './app/screens/login';
 
 export default function App() {
 
   const Stack = createStackNavigator();
   
+  // TODO: Figure out theme
   const theme = {
     ...DefaultTheme,
     dark: false,
@@ -28,6 +31,8 @@ export default function App() {
           <Stack.Screen name="Maps" component={GarageSaleMap} />
           <Stack.Screen name="Create" component={CreateGarageSale} />
           <Stack.Screen name="User" component={User} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="SignUp" component={SignUp} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>

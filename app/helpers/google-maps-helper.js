@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const GoogleMapsAPI = axios.create({
-	baseURL: 'https://maps.googleapis.com/maps/api/geocode/json'
+	baseURL: 'https://maps.googleapis.com/maps/api/geocode'
 });
 
 GoogleMapsAPI.interceptors.request.use(
@@ -10,18 +10,25 @@ GoogleMapsAPI.interceptors.request.use(
 		return config;
 	},
 	(err) => {
+    console.error(err);
 		return Promise.reject(err);
 	}
 );
 
 export const getLocationDetails = async (callback, address) => {
-	const response = await GoogleMapsAPI.get(
-		`?address=${address}&key=AIzaSyC3YGAXNmZzQkYOfuB_MtPMFDv7-wHAXIA`
-	)
+  // TODO: Figure out how to store the API Key
+  // https://reactnative.dev/docs/security#storing-sensitive-info
+  address = address.replace(/\s/g, '%');
 
-  console.log(response.data);
-
-	return callback(response.data);
+  try {
+    const response = await GoogleMapsAPI.get(
+      `json?address=${address}&key=AIzaSyC3YGAXNmZzQkYOfuB_MtPMFDv7-wHAXIA`
+    );
+    return callback(true, response.data);
+  } catch (err) {
+    console.warn(err);
+    return callback(false, undefined);
+  }
 };
 
 export default GoogleMapsAPI;

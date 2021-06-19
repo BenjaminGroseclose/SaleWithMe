@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, Text } from 'react-native'
+import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native'
 import { Icon } from 'react-native-elements';
-import MapView, { Marker, Overlay } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import imageMap from './../../assets/assets'
 import { setupDataListener } from '../helpers/firebase-helper';
@@ -84,7 +84,7 @@ const GarageSaleMap = ({ navigation }) => {
 			{ currentLocation && salesNearMe ? 
 				<RenderMap /> 
 				: 
-				<Text style={{textAlign: 'center', paddingTop: 8}}>Loading...</Text> 
+				<ActivityIndicator size="large" />
 			}
 		</View>
 	);

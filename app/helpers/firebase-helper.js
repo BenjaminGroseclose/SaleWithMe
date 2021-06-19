@@ -57,4 +57,8 @@ export const getDataByKey = (callback, feature, key) => {
 			callback([]);
 		}
 	});
+};
+
+export const getCurrentUser = () => {
+	return firebase.auth().currentUser;
 }
