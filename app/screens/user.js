@@ -28,7 +28,7 @@ const User = ({ navigation }) => {
 
 	const signOut = () => {
 		firebase.auth().signOut();
-		nav
+		navigation.goBack();
 	}
 
 	const Auth = () => {

@@ -8,6 +8,7 @@ import CreateGarageSale from './app/screens/create-garage-sale';
 import User from './app/screens/user'
 import SignUp from './app/screens/sign-up';
 import Login from './app/screens/login';
+import ViewGarageSale from './app/screens/view-garage-sale';
 
 export default function App() {
 
@@ -33,6 +34,7 @@ export default function App() {
           <Stack.Screen name="User" component={User} />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="ViewGarageSale" component={ViewGarageSale} />
         </Stack.Navigator>
       </NavigationContainer>
     </TouchableWithoutFeedback>
