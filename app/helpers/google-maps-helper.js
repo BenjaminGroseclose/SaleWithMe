@@ -18,7 +18,6 @@ GoogleMapsAPI.interceptors.request.use(
 export const getLocationDetails = async (callback, address) => {
   // TODO: Figure out how to store the API Key
   // https://reactnative.dev/docs/security#storing-sensitive-info
-  address = address.replace(/\s/g, '%');
 
   try {
     const response = await GoogleMapsAPI.get(

@@ -41,15 +41,7 @@ const GarageSaleMap = ({ navigation }) => {
 	useEffect(() => {
 		if (currentLocation) {
 			// Load from firebase
-			//setupDataListener((data) => setSalesNearMe(data), FEATURES.GARAGE_SALES)
-			setSalesNearMe([
-				{
-					title: 'Hello World',
-					description: 'Hello World Description',
-					latitude: 42.938558,
-					longitude: -86.1455
-				}
-			])
+			setupDataListener((data) => setSalesNearMe(data), FEATURES.GARAGE_SALES);
 		}
 	}, [currentLocation]);
 
