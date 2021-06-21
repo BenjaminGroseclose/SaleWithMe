@@ -1,3 +1,4 @@
 export const FEATURES = {
-	GARAGE_SALES: 'garage-sales'
+	GARAGE_SALES: 'garage-sales',
+	SALES: 'sales'
 };

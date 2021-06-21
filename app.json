@@ -17,16 +17,29 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "edu.gvsu.salewithme",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "package": "edu.gvsu.salewithme",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png",
+      "firebase": {
+        "apiKey": "AIzaSyAsCvcJRAh7licVdTrQ47yL9Qf6wMtEOcM",
+        "authDomain": "cis657-geo-location.firebaseapp.com",
+        "databaseURL": "https://cis657-geo-location-default-rtdb.firebaseio.com",
+        "projectId": "cis657-geo-location",
+        "storageBucket": "cis657-geo-location.appspot.com",
+        "messagingSenderId": "657293073194",
+        "appId": "1:657293073194:web:07b0e39f61ac2afb255c53"
+      }
     }
   }
 }

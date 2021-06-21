@@ -99,7 +99,7 @@ const CreateGarageSale = ({ navigation }) => {
 				[{ 
 					text: "Cancel", 
 					style: "cancel",
-					onPress: () => navigation.goBack()
+					onPress: () => navigation.navigate('Home')
 				}]
 			);
 		} else {
