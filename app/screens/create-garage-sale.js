@@ -4,11 +4,17 @@ import { Input, Icon, Button, CheckBox } from 'react-native-elements';
 import { FEATURES } from '../helpers/constants';
 import { getCurrentUser, writeData } from '../helpers/firebase-helper';
 import { getLocationDetails } from '../helpers/google-maps-helper';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const CreateGarageSale = ({ navigation }) => {
 	const [title, setTitle] = useState();
 	const [description, setDescription] = useState();
 	const [address, setAddress] = useState();
+	const [startDate, setStartDate ] = useState(new Date(Date.now()));
+	const [endDate, setEndDate] = useState(new Date(Date.now()));
+
+	const [showStart, setShowStart] = useState(false);
+	const [showEnd, setShowEnd] = useState(false);
 
 	// Checkbox items
 	const [baby, setBaby] = useState(false);
@@ -22,6 +28,8 @@ const CreateGarageSale = ({ navigation }) => {
 	const [titleError, setTitleError] = useState(errorStyles.normal);
 	const [descriptionError, setDescriptionError] = useState(errorStyles.normal);
 	const [addressError, setAddressError] = useState(errorStyles.normal);
+	const [startDateError, setStartDateError] = useState(errorStyles.normal);
+	const [endDateError, setEndDateError] = useState(errorStyles.normal);
 
 	useEffect(() => {
 		// Setup Navigation
@@ -67,6 +75,15 @@ const CreateGarageSale = ({ navigation }) => {
 			setAddressError(errorStyles.normal);
 		}
 
+		if (new Date(startDate.toDateString()) > new Date(endDate.toDateString())) {
+			setStartDateError(errorStyles.error);
+			setEndDateError(errorStyles.error);
+			isValid = false;
+		} else {
+			setStartDateError(errorStyles.normal);
+			setEndDateError(errorStyles.normal);
+		}
+
 		return isValid;
 	}
 
@@ -77,6 +94,8 @@ const CreateGarageSale = ({ navigation }) => {
 			const currentUsername = currentUser ? currentUser.email : 'anonymous' ;
 
 			const sale = {
+				startDate: startDate.toDateString(),
+				endDate: endDate.toDateString(),
 				title: title,
 				description: description,
 				latitude: data.results[0].geometry.location.lat,
@@ -92,7 +111,7 @@ const CreateGarageSale = ({ navigation }) => {
 			};
 
 			const currentDate = Date.now();
-			writeData(FEATURES.GARAGE_SALES, `${currentDate}-${currentUsername}`, sale);
+			writeData(FEATURES.GARAGE_SALES, `${currentDate}`, sale);
 			Alert.alert(
 				'Success!',
 				`Other users should be able to see you garage now at: ${address}, thanks!.`,
@@ -110,6 +129,18 @@ const CreateGarageSale = ({ navigation }) => {
 			);
 		}
 	};
+
+	const onStartChange = (event, selectedDate) => {
+    const currentDate = selectedDate || startDate;
+    setStartDate(currentDate);
+		setShowStart(false);
+  };
+
+	const onEndChange = (event, selectedDate) => {
+    const currentDate = selectedDate || endDate;
+    setEndDate(currentDate);
+		setShowEnd(false);
+  };
 
 	return (
 		<View style={styles.container}>
@@ -131,7 +162,7 @@ const CreateGarageSale = ({ navigation }) => {
 				onChangeText={setAddress}
 				errorStyle={addressError}
 				errorMessage='Address is required' />
-			<View style={styles.checkboxContainer}>
+			<View style={styles.rowContainer}>
 				<CheckBox
 					title='Baby'
 					checked={baby}
@@ -141,7 +172,7 @@ const CreateGarageSale = ({ navigation }) => {
 					checked={boyMen}
 					onPress={() => setBoyMen(!boyMen)} />
 			</View>
-			<View style={styles.checkboxContainer}>
+			<View style={styles.rowContainer}>
 				<CheckBox
 					title='Girl / Women'
 					checked={girlWomen}
@@ -151,7 +182,7 @@ const CreateGarageSale = ({ navigation }) => {
 					checked={homeDecoration}
 					onPress={() => setHomeDecoration(!homeDecoration)} />
 			</View>
-			<View style={styles.checkboxContainer}>
+			<View style={styles.rowContainer}>
 				<CheckBox
 					title='Kitchen'
 					checked={kitchen}
@@ -160,6 +191,48 @@ const CreateGarageSale = ({ navigation }) => {
 					title='Electronics'
 					checked={electronics} 
 					onPress={() => setElectronics(!electronics)} />
+			</View>
+			<View style={styles.rowContainer}>
+				<Input
+					containerStyle={styles.dateInput}
+					placeholder='Start Date'
+					disabled={true}
+					value={startDate.toDateString()} 
+					errorStyle={startDateError}
+					errorMessage='Start date must come on or before the end date' />
+				<Button title="Select Start Date" onPress={() => setShowStart(!showStart)} />
+				{
+				showStart ? 			
+					<DateTimePicker
+					testID="startDateTimePicker"
+					mode='date'
+					value={startDate}
+					display='default'
+					onChange={onStartChange} />
+					: 
+					<View></View>
+				}
+			</View>
+			<View style={styles.rowContainer}>
+				<Input
+					containerStyle={styles.dateInput}
+					placeholder='End Date'
+					disabled={true}
+					value={endDate.toDateString()}
+					errorStyle={endDateError}
+					errorMessage='End date must come on or after the start date' />
+				<Button title="Select End Date" onPress={() => setShowEnd(!showEnd)} />
+				{
+				showEnd ? 			
+					<DateTimePicker
+					testID="startDateTimePicker"
+					mode='date'
+					value={endDate}
+					display='default'
+					onChange={onEndChange} />
+					: 
+					<View></View>
+				}
 			</View>
 			<Button
 				title="Submit"
@@ -173,9 +246,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		margin: 16
 	},
-	checkboxContainer: {
+	rowContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-evenly'
+	},
+	dateInput: {
+		width: 200
 	}
 });
 

@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "edu.gvsu.salewithme",
+      "bundleIdentifier": "edu.gvsu.bengroseclose.salewithme",
       "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "package": "edu.gvsu.salewithme",
+      "package": "edu.gvsu.bengroseclose.salewithme",
       "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -31,14 +33,17 @@
     },
     "web": {
       "favicon": "./assets/icon.png",
-      "firebase": {
-        "apiKey": "AIzaSyAsCvcJRAh7licVdTrQ47yL9Qf6wMtEOcM",
-        "authDomain": "cis657-geo-location.firebaseapp.com",
-        "databaseURL": "https://cis657-geo-location-default-rtdb.firebaseio.com",
-        "projectId": "cis657-geo-location",
-        "storageBucket": "cis657-geo-location.appspot.com",
-        "messagingSenderId": "657293073194",
-        "appId": "1:657293073194:web:07b0e39f61ac2afb255c53"
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyCpdrRJZvFLP8L4WQzWIYL4Ok6vhBiMJes",
+          "authDomain": "salewithme-c1551.firebaseapp.com",
+          "databaseURL": "https://salewithme-c1551-default-rtdb.firebaseio.com",
+          "projectId": "salewithme-c1551",
+          "storageBucket": "salewithme-c1551.appspot.com",
+          "messagingSenderId": "887229762147",
+          "appId": "1:887229762147:web:1bce155849a436c7a44656",
+          "measurementId": "G-Q87YL30FTX"
+        }
       }
     }
   }

@@ -34,6 +34,7 @@ const GarageSaleMap = ({ navigation }) => {
 			}
 
 			let location = await Location.getCurrentPositionAsync({});
+			console.log(location);
 			setCurrentLocation(location);
 		})();
 	}, []);
@@ -41,9 +42,17 @@ const GarageSaleMap = ({ navigation }) => {
 	useEffect(() => {
 		if (currentLocation) {
 			// Load from firebase
-			setupDataListener((data) => setSalesNearMe(data), FEATURES.GARAGE_SALES);
+			setupDataListener((data) => filterSale(data), FEATURES.GARAGE_SALES);
 		}
 	}, [currentLocation]);
+
+	const filterSale = (data) => {
+		const currentDate = new Date(Date.now()).toDateString();
+
+		const filteredData = data.filter(x => x.startDate <= currentDate && x.endDate >= currentDate);
+
+		setSalesNearMe(filteredData);
+	}
 
 	const RenderMap = () => {
 		return (

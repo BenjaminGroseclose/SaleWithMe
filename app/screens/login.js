@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import firebase from "firebase/app";
 import "firebase/auth";
@@ -15,7 +15,7 @@ const Login = ({ navigation }) => {
     if (isValidSubmit()) {
       firebase.auth().signInWithEmailAndPassword(username, password)
       .then((userCredential) => {
-        navigation.navigate('User');
+        navigation.navigate('Home');
       }).catch((error) => {
         console.log(error);
         showAlert(`Invalid username / password, please try again.`);

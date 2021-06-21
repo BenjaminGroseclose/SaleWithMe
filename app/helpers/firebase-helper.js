@@ -4,6 +4,7 @@ import 'firebase/database'
 const firebaseConfig = {
 	apiKey: "AIzaSyCpdrRJZvFLP8L4WQzWIYL4Ok6vhBiMJes",
 	authDomain: "salewithme-c1551.firebaseapp.com",
+	databaseURL: "https://salewithme-c1551-default-rtdb.firebaseio.com",
 	projectId: "salewithme-c1551",
 	storageBucket: "salewithme-c1551.appspot.com",
 	messagingSenderId: "887229762147",

@@ -17,7 +17,7 @@ const SignUp = ({ navigation }) => {
       .then((userCredential) => {
         firebase.auth().signInWithEmailAndPassword(username, password)
         .then((userCredential) => {
-          navigation.navigate('User');
+          navigation.navigate('Home');
         }).catch((error) => {
           console.log(error);
           showAlert(`Sorry, had an issue logging in after creating the account, please try again`);

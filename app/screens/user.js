@@ -6,23 +6,26 @@ import "firebase/auth";
 import Profile from './../components/profile';
 
 const User = ({ navigation }) => {
-	const [user, setUser] = useState();
 
 	useEffect(() => {
 		// Setup Navigation
-		setUser(firebase.auth().currentUser);
-		const title = user ? user.email : 'Account' ;
-
-		navigation.setOptions({
-			headerTitle: title,
-			headerTitleAlign: 'center',
-			headerRight: () => (
-				<Icon name="logout" onPress={() => firebase.auth().signOut()} />
-			),
-			headerRightContainerStyle: {
-				paddingRight: 12
-			}
-		});
+		if (firebase.auth().currentUser) {
+			navigation.setOptions({
+				headerTitle: firebase.auth().currentUser.email,
+				headerTitleAlign: 'center',
+				headerRight: () => (
+					<Icon name="logout" onPress={() => signOut()} />
+				),
+				headerRightContainerStyle: {
+					paddingRight: 12
+				}
+			});
+		} else {
+			navigation.setOptions({
+				headerTitle: 'Account',
+				headerTitleAlign: 'center',
+			});
+		}
 
 	}, [firebase.auth().currentUser]);
 
@@ -49,7 +52,7 @@ const User = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			{firebase.auth().currentUser ? <Profile user={firebase.auth().currentUser} /> : <Auth /> }
+			{firebase.auth().currentUser ? <Profile user={firebase.auth().currentUser} navigation={navigation} /> : <Auth /> }
 		</SafeAreaView>
 	);
 };

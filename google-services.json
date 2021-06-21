@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "887229762147",
+    "firebase_url": "https://salewithme-c1551-default-rtdb.firebaseio.com",
+    "project_id": "salewithme-c1551",
+    "storage_bucket": "salewithme-c1551.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887229762147:android:716d340245c0f7f6a44656",
+        "android_client_info": {
+          "package_name": "edu.gvsu.bengroseclose.salewithme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887229762147-phgm9ku7qbla3c2i39v532m9i4udcmp2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCt6gNhTezdVz9h5LPqAwsAgoQ9UFs36io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887229762147-phgm9ku7qbla3c2i39v532m9i4udcmp2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
