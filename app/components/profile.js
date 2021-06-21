@@ -16,8 +16,6 @@ const Profile = ({ user, navigation }) => {
     if (data) {
       const fileredData = data.filter(x => x.user === user.email);
 
-      console.log(fileredData);
-
       setUsersSales(fileredData);
       setIsLoading(false);
     }    
@@ -25,8 +23,16 @@ const Profile = ({ user, navigation }) => {
 
   const RenderSale = (index, sale) => {
     return (
-      <TouchableHighlight style={styles.listItem} key={index} onPress={() => navigation.push('ViewGarageSale', { sale: sale })}>
+      <TouchableHighlight 
+        style={styles.listItem}
+        key={index}
+        onPress={() => navigation.push('ViewGarageSale', { sale: sale })}
+      >
         <Text>{sale.title}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text>Start: {sale.startDate}</Text>
+          <Text>End: {sale.endDate}</Text>
+        </View>
       </TouchableHighlight>
     );
   };
@@ -46,7 +52,7 @@ const Profile = ({ user, navigation }) => {
           </View>
         :
           isLoading === true ? 
-            <ActivityIndicator size="large" /> 
+            <ActivityIndicator size="large" color="#0000ff" /> 
           :
             <Text>No previous sales</Text>
       }

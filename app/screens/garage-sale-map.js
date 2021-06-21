@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Dimensions, ActivityIndicator, Alert } from 'react-native'
 import { Icon } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -28,13 +28,15 @@ const GarageSaleMap = ({ navigation }) => {
 		(async () => {
 			let { status } = await Location.requestForegroundPermissionsAsync();
 			if (status !== 'granted') {
-				// TODO: Handle this better
-				console.error('Permission not granted');
+				Alert.alert(
+					'Alert!',
+					`You must grant location permission to use the map feature.`,
+					[{ text: "Cancel", onPress=() => navigation.goBack(), style: "cancel" }]
+				);
 				return;
 			}
 
 			let location = await Location.getCurrentPositionAsync({});
-			console.log(location);
 			setCurrentLocation(location);
 		})();
 	}, []);
@@ -48,9 +50,7 @@ const GarageSaleMap = ({ navigation }) => {
 
 	const filterSale = (data) => {
 		const currentDate = new Date(Date.now()).toDateString();
-
 		const filteredData = data.filter(x => x.startDate <= currentDate && x.endDate >= currentDate);
-
 		setSalesNearMe(filteredData);
 	}
 
@@ -85,7 +85,7 @@ const GarageSaleMap = ({ navigation }) => {
 			{ currentLocation && salesNearMe ? 
 				<RenderMap /> 
 				: 
-				<ActivityIndicator size="large" />
+				<ActivityIndicator size="large" color="#0000ff" />
 			}
 		</View>
 	);
