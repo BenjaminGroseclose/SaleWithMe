@@ -26,7 +26,12 @@ const getActiveRouteName = state => {
 export default function App() {
 
   // Ignoring warning based on this: https://github.com/expo/expo/issues/13249
-  LogBox.ignoreLogs([`Constants.installationId has been deprecated in favor of generating and storing your own ID. Implement it using expo-application's androidId on Android and a storage API such as expo-secure-store on iOS and localStorage on the web. This API will be removed in SDK 44.`]);
+  LogBox.ignoreLogs(
+    [
+      `Constants.installationId has been deprecated in favor of generating and storing your own ID. Implement it using expo-application's androidId on Android and a storage API such as expo-secure-store on iOS and localStorage on the web. This API will be removed in SDK 44.`,
+      `Setting a timer for a long period of time, i.e. multiple minutes, is a performance and correctness...`
+    ]
+  );
 
   const routeNameRef = useRef();
   const navigationRef = useRef();

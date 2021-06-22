@@ -11,13 +11,25 @@ const SignUp = ({ navigation }) => {
   const [usernameError, setUsernameError] = useState(errorStyles.normal);
   const [passwordError, setPasswordError] = useState(errorStyles.normal);
 
+  useEffect(() => {
+        // Setup Navigation
+    navigation.setOptions({
+      headerTitle: 'Sign Up',
+      headerTitleAlign: 'center'
+    });
+  }, []);
+
   const submit = () => {
     if (isValidSubmit()) {
       firebase.auth().createUserWithEmailAndPassword(username, password)
       .then((userCredential) => {
         firebase.auth().signInWithEmailAndPassword(username, password)
         .then((userCredential) => {
-          navigation.navigate('Home');
+          Alert.alert(
+            'Success!',
+            'Successfully logged, please return to the home screen',
+            [{ text: "Ok", onPress: () => navigation.navigate('Home'), style: "cancel" }]
+          );
         }).catch((error) => {
           console.log(error);
           showAlert(`Sorry, had an issue logging in after creating the account, please try again`);

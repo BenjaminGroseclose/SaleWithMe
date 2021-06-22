@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
-import { Badge } from 'react-native-elements';
-import { getBadges } from '../helpers/badge-helper';
+import { Icon } from 'react-native-elements';
+import { getSaleIcons } from '../helpers/icon-helper';
 
 const ViewGarageSale = ({ navigation, route }) => {
   const [sale, setSale] = useState();
-  const [badges, setBadges] = useState([]);
+  const [icons, setIcons] = useState([]);
 
   useEffect(() => {
     // Setup Navigation
@@ -18,27 +18,32 @@ const ViewGarageSale = ({ navigation, route }) => {
   useEffect(() => {
     if (route.params?.sale) {
       setSale(route.params.sale);
-      const test = getBadges(route.params.sale)
-      console.log(test);
-      // TODO: Look into icons instead of badges
-      setBadges(test);
+      setIcons(getSaleIcons(route.params.sale));
     }
 
   }, [route.params?.sale])
 
   return (
-    <View>
+    <View style={styles.container}>
       {
         sale ?
         <View>
-          <Text>Title: {sale.title}</Text>
-          <Text>Description: {sale.description}</Text>
-          <Text>Address: {sale.address}</Text>
+          <Text style={styles.text}>Title: {sale.title}</Text>
+          <Text style={styles.text}>Description: {sale.description}</Text>
+          <Text style={styles.text}>Address: {sale.address}</Text>
+          <Text style={styles.text}>Catagories:</Text>
           {
-            badges.map((item, index) => {
-              <Badge key={index} value={item} status='primary' />
+            icons.map((item, index) => {
+              return (
+                <View key={index} style={styles.iconRow}>
+                  <Icon size={30} iconStyle={{width: 150}} name={item.icon} type={item.type} />
+                  <Text style={{fontSize: 18}}>{item.text}</Text>
+                </View>
+              )
             })
           }
+          <Text style={styles.text}>Start: {sale.startDate}</Text>
+          <Text style={styles.text}>End: {sale.endDate}</Text>
         </View> 
         :
         <ActivityIndicator size="large" color="#0000ff" />
@@ -49,7 +54,20 @@ const ViewGarageSale = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    margin: 16
+  },
+  iconRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    borderBottomWidth: 1
+  },
+  text: {
+    fontSize: 18,
+    marginTop: 8
+  }
 });
 
 export default ViewGarageSale;

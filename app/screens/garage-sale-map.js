@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, ActivityIndicator, Alert } from 'react-native'
+import { StyleSheet, View, Dimensions, ActivityIndicator, Alert, Text } from 'react-native'
 import { Icon } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import imageMap from './../../assets/assets'
 import { setupDataListener } from '../helpers/firebase-helper';
 import { FEATURES } from '../helpers/constants';
+import { getSaleIcons } from '../helpers/icon-helper';
 
 const GarageSaleMap = ({ navigation }) => {
 	const [currentLocation, setCurrentLocation] = useState(undefined);
 	const [salesNearMe, setSalesNearMe] = useState(undefined);
+	const [selectedSale, setSelectedSale] = useState(undefined);
 
 	const [mapStyle, setMapStyle] = useState('full');
 
@@ -51,8 +53,9 @@ const GarageSaleMap = ({ navigation }) => {
 	}, [currentLocation]);
 
 	const filterSale = (data) => {
-		const currentDate = new Date(Date.now()).toDateString();
-		const filteredData = data.filter(x => x.startDate <= currentDate && x.endDate >= currentDate);
+		// TODO: Gross...
+		const currentDate = new Date(new Date(Date.now()).toDateString());
+		const filteredData = data.filter(x => new Date(x.startDate) <= currentDate && new Date(x.endDate) >= currentDate);
 		setSalesNearMe(filteredData);
 	}
 
@@ -75,18 +78,64 @@ const GarageSaleMap = ({ navigation }) => {
 								longitude: sale.longitude
 							}}
 							title={sale.title}
-							onPress={() => setMapStyle('half')}
+							onPress={() => setSale(sale)}
 							image={imageMap.get('sale')}
 						 />
 					))}
 			</MapView>
 		);
+	};
+
+	const setSale = (sale) => {
+		setSelectedSale(sale);
+		setMapStyle('half');
 	}
+
+	const RenderMarkerDetails = () => {
+		const icons = getSaleIcons(selectedSale);
+
+		return (
+			<View style={styles.selectedContainer}>
+				<View style={styles.selectedHeader}>
+					<View>
+						<Text>Title: {selectedSale.title}</Text>
+						<Text style={{maxWidth: '80%'}}>Address: {selectedSale.address}</Text>
+					</View>
+					<View>
+						<Text>Start: {selectedSale.startDate}</Text>
+						<Text>End: {selectedSale.endDate}</Text>
+						{
+							// TODO: Consider having the user's provide a username instead of email.
+						}
+						<Text>By: {selectedSale.user ? selectedSale.user : 'Unknown'}</Text>
+					</View>
+				</View>
+				{
+            icons.map((item, index) => {
+              return (
+                <View key={index} style={styles.iconRow}>
+                  <Icon size={30} iconStyle={{width: 150}} name={item.icon} type={item.type} />
+                  <Text>{item.text}</Text>
+                </View>
+              )
+            })
+          }
+			</View>
+		);
+	};
 
 	return (
 		<View style={styles.container}>
 			{ currentLocation && salesNearMe ? 
-				<RenderMap /> 
+				<View>
+					<RenderMap />
+					{
+						mapStyle === 'half' && selectedSale ? 
+							<RenderMarkerDetails />
+						:
+							<View></View>
+					}
+				</View>
 				: 
 				<ActivityIndicator size="large" color="#0000ff" />
 			}
@@ -105,6 +154,21 @@ const styles = StyleSheet.create({
 	mapHalf: {
 		width: Dimensions.get('window').width,
     height: (Dimensions.get('window').height / 2)
+	},
+	selectedContainer: {
+		margin: 8
+	},
+	iconRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+		paddingBottom: 4,
+    borderBottomWidth: 1
+  },
+	selectedHeader: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		borderBottomWidth: 1
 	}
 });
 

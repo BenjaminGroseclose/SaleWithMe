@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Alert } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import firebase from "firebase/app";
@@ -11,25 +11,33 @@ const Login = ({ navigation }) => {
   const [usernameError, setUsernameError] = useState(errorStyles.normal);
   const [passwordError, setPasswordError] = useState(errorStyles.normal);
 
+  useEffect(() => {
+    		// Setup Navigation
+		navigation.setOptions({
+			headerTitle: 'Login',
+			headerTitleAlign: 'center'
+		});
+  }, []);
+
   const submit = () => {
     if (isValidSubmit()) {
       firebase.auth().signInWithEmailAndPassword(username, password)
       .then((userCredential) => {
-        navigation.navigate('Home');
+        Alert.alert(
+          'Success!',
+          'Successfully logged, please return to the home screen',
+          [{ text: "Ok", onPress: () => navigation.navigate('Home'), style: "cancel" }]
+        );
       }).catch((error) => {
         console.log(error);
-        showAlert(`Invalid username / password, please try again.`);
+        Alert.alert(
+          'Alert!',
+          'Invalid username / password, please try again.',
+          [{ text: "Cancel", style: "cancel" }]
+        );
       });
     }
   };
-
-  const showAlert = (message) => {
-		Alert.alert(
-			'Alert!',
-			message,
-			[{ text: "Cancel", style: "cancel" }]
-		)
-	};
 
   const isValidSubmit = () => {
 		let isValid = true;
