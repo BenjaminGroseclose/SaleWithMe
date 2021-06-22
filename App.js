@@ -45,7 +45,6 @@ export default function App() {
 
   const Stack = createStackNavigator();
   
-  // TODO: Figure out theme
   const theme = {
     ...DefaultTheme,
     dark: false,

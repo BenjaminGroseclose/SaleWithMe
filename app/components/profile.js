@@ -6,7 +6,6 @@ import { setupDataListener } from '../helpers/firebase-helper';
 const Profile = ({ user, navigation }) => {
   const [userSales, setUsersSales] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  // TODO: Load all of this person's garage sale history into a list view
 
   useEffect(() => {
     setupDataListener((data) => filterData(data), FEATURES.GARAGE_SALES)
