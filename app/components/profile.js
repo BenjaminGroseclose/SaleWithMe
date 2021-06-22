@@ -45,7 +45,7 @@ const Profile = ({ user, navigation }) => {
           <View>
             <Text>Previous Sales:</Text>
             <FlatList 
-              style={{marginTop: 8}}
+              style={styles.list}
               data={userSales}
               renderItem={({index, item}) => RenderSale(index, item)}
               keyExtractor={item => item.id} />
@@ -63,10 +63,15 @@ const Profile = ({ user, navigation }) => {
 
 const styles = StyleSheet.create({
   listItem: {
-    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#000',
     padding: 8
+  },
+  list: {
+    marginTop: 8,
+    marginBottom: 32,
+    borderTopWidth: 1,
+    borderBottomWidth: 1
   }
 });
 
