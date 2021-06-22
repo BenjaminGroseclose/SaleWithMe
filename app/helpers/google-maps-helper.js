@@ -1,4 +1,5 @@
 import axios from 'axios';
+import SECRETS from './../../secrets';
 
 const GoogleMapsAPI = axios.create({
 	baseURL: 'https://maps.googleapis.com/maps/api/geocode'
@@ -21,7 +22,7 @@ export const getLocationDetails = async (callback, address) => {
 
   try {
     const response = await GoogleMapsAPI.get(
-      `json?address=${address}&key=AIzaSyC3YGAXNmZzQkYOfuB_MtPMFDv7-wHAXIA`
+      `json?address=${address}&key=${SECRETS.GOOGLE_API}`
     );
     return callback(true, response.data);
   } catch (err) {
