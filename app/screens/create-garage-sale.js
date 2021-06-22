@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Platform, Text, Keyboard } from 'react-native';
 import { Input, Icon, Button, CheckBox } from 'react-native-elements';
 import { FEATURES } from '../helpers/constants';
 import { getCurrentUser, writeData } from '../helpers/firebase-helper';
@@ -142,6 +142,78 @@ const CreateGarageSale = ({ navigation }) => {
 		setShowEnd(false);
   };
 
+	const AndroidDatePicker = () => {
+		return (
+			<View>
+				<View style={[styles.rowContainer, {marginTop: 8}]}>
+					<Input
+						containerStyle={styles.dateInput}
+						placeholder='Start Date'
+						disabled={true}
+						value={startDate.toDateString()} 
+						errorStyle={startDateError}
+						errorMessage='Start date must come on or before the end date' />
+					<Button title="Select Start Date" onPress={() => setShowStart(true)} />
+					{
+					showStart ? 			
+						<DateTimePicker
+							testID="startDateTimePicker"
+							mode='date'
+							value={startDate}
+							display='default'
+							onChange={onStartChange} />
+						: 
+						<View></View>
+					}
+				</View>
+				<View style={styles.rowContainer}>
+					<Input
+						containerStyle={styles.dateInput}
+						placeholder='End Date'
+						disabled={true}
+						value={endDate.toDateString()}
+						errorStyle={endDateError}
+						errorMessage='End date must come on or after the start date' />
+					<Button title="Select End Date" onPress={() => setShowEnd(true)} />
+					{
+					showEnd ? 			
+						<DateTimePicker
+							testID="endDateTimePicker"
+							mode='date'
+							value={endDate}
+							display='default'
+							onChange={onEndChange} />
+						: 
+						<View></View>
+					}
+				</View>
+			</View>
+		);
+	}
+
+	const IOSDatePicker = () => {
+		return (
+			<View>
+				<Text>Start:</Text>
+				<DateTimePicker
+					style={{marginTop: 8, marginBottom: 8}}
+					testID="startDateTimePicker"
+					mode='date'
+					value={startDate}
+					display='default'
+					onChange={onStartChange} />
+				<Text>End:</Text>
+				<DateTimePicker
+					style={{marginTop: 8, marginBottom: 8}}
+					testID="endDateTimePicker"
+					mode='date'
+					value={endDate}
+					display='default'
+					onChange={onEndChange} />		
+			</View>				
+		);
+	}
+
 	return (
 		<View style={styles.container}>
 			<Input
@@ -192,51 +264,16 @@ const CreateGarageSale = ({ navigation }) => {
 					checked={electronics} 
 					onPress={() => setElectronics(!electronics)} />
 			</View>
-			<View style={styles.rowContainer}>
-				<Input
-					containerStyle={styles.dateInput}
-					placeholder='Start Date'
-					disabled={true}
-					value={startDate.toDateString()} 
-					errorStyle={startDateError}
-					errorMessage='Start date must come on or before the end date' />
-				<Button title="Select Start Date" onPress={() => setShowStart(!showStart)} />
-				{
-				showStart ? 			
-					<DateTimePicker
-					testID="startDateTimePicker"
-					mode='date'
-					value={startDate}
-					display='default'
-					onChange={onStartChange} />
-					: 
-					<View></View>
-				}
-			</View>
-			<View style={styles.rowContainer}>
-				<Input
-					containerStyle={styles.dateInput}
-					placeholder='End Date'
-					disabled={true}
-					value={endDate.toDateString()}
-					errorStyle={endDateError}
-					errorMessage='End date must come on or after the start date' />
-				<Button title="Select End Date" onPress={() => setShowEnd(!showEnd)} />
-				{
-				showEnd ? 			
-					<DateTimePicker
-					testID="startDateTimePicker"
-					mode='date'
-					value={endDate}
-					display='default'
-					onChange={onEndChange} />
-					: 
-					<View></View>
-				}
-			</View>
+			{
+				Platform.OS === 'ios' ?
+					<IOSDatePicker />
+				:
+					<AndroidDatePicker />
+			}
 			<Button
+				style={{marginTop: 8}}
 				title="Submit"
-				onPress={submit} />
+				onPress={submit} />		
 		</View>
 	)
 };
@@ -248,7 +285,7 @@ const styles = StyleSheet.create({
 	},
 	rowContainer: {
 		flexDirection: 'row',
-		justifyContent: 'space-evenly'
+		justifyContent: 'space-between'
 	},
 	dateInput: {
 		width: 200

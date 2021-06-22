@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, LogBox } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, LogBox, Keyboard } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Analytics from 'expo-firebase-analytics';
@@ -56,7 +56,7 @@ export default function App() {
   };
 
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <NavigationContainer 
         theme={theme}
         ref={navigationRef}
