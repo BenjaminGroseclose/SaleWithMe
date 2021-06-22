@@ -28,8 +28,8 @@ const Profile = ({ user, navigation }) => {
         key={index}
         onPress={() => navigation.push('ViewGarageSale', { sale: sale })}
       >
-        <Text>{sale.title}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View>
+          <Text>Title: {sale.title}</Text>
           <Text>Start: {sale.startDate}</Text>
           <Text>End: {sale.endDate}</Text>
         </View>

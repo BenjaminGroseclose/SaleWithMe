@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator } from 'react-native';
+import { Badge } from 'react-native-elements';
+import { getBadges } from '../helpers/badge-helper';
 
 const ViewGarageSale = ({ navigation, route }) => {
   const [sale, setSale] = useState();
+  const [badges, setBadges] = useState([]);
 
   useEffect(() => {
     // Setup Navigation
@@ -13,15 +16,34 @@ const ViewGarageSale = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    if (route.param?.sale) {
-      setSale(route.param.sale);
+    if (route.params?.sale) {
+      setSale(route.params.sale);
+      const test = getBadges(route.params.sale)
+      console.log(test);
+      // TODO: Look into icons instead of badges
+      setBadges(test);
     }
 
-  }, [route.param?.sale])
+  }, [route.params?.sale])
 
   return (
     <View>
-      <Text>View Garage Sale</Text>
+      {
+        sale ?
+        <View>
+          <Text>Title: {sale.title}</Text>
+          <Text>Description: {sale.description}</Text>
+          <Text>Address: {sale.address}</Text>
+          {
+            badges.map((item, index) => {
+              <Badge key={index} value={item} status='primary' />
+            })
+          }
+        </View> 
+        :
+        <ActivityIndicator size="large" color="#0000ff" />
+      }
+
     </View>
   )
 };

@@ -11,6 +11,8 @@ const GarageSaleMap = ({ navigation }) => {
 	const [currentLocation, setCurrentLocation] = useState(undefined);
 	const [salesNearMe, setSalesNearMe] = useState(undefined);
 
+	const [mapStyle, setMapStyle] = useState('full');
+
 	useEffect(() => {
 		// Setup Navigation
 		navigation.setOptions({
@@ -31,7 +33,7 @@ const GarageSaleMap = ({ navigation }) => {
 				Alert.alert(
 					'Alert!',
 					`You must grant location permission to use the map feature.`,
-					[{ text: "Cancel", onPress=() => navigation.goBack(), style: "cancel" }]
+					[{ text: "Cancel", onPress: () => navigation.goBack(), style: "cancel" }]
 				);
 				return;
 			}
@@ -57,7 +59,8 @@ const GarageSaleMap = ({ navigation }) => {
 	const RenderMap = () => {
 		return (
 			<MapView 
-				style={styles.map} 
+				style={mapStyle === 'full' ? styles.mapFull : styles.mapHalf}
+				onPress={() => setMapStyle('full')}
 				initialRegion={{
 					latitude: currentLocation.coords.latitude,
 					longitude: currentLocation.coords.longitude,
@@ -72,7 +75,7 @@ const GarageSaleMap = ({ navigation }) => {
 								longitude: sale.longitude
 							}}
 							title={sale.title}
-							description={sale.description}
+							onPress={() => setMapStyle('half')}
 							image={imageMap.get('sale')}
 						 />
 					))}
@@ -95,10 +98,14 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1
 	},
-	map: {
+	mapFull: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height
-  }
+  },
+	mapHalf: {
+		width: Dimensions.get('window').width,
+    height: (Dimensions.get('window').height / 2)
+	}
 });
 
 export default GarageSaleMap;
