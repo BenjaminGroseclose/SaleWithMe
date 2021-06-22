@@ -63,10 +63,10 @@ const GarageSaleMap = ({ navigation }) => {
 		return (
 			<MapView 
 				style={mapStyle === 'full' ? styles.mapFull : styles.mapHalf}
-				onPress={() => setMapStyle('full')}
+				onLongPress={() => selectMap()}
 				initialRegion={{
-					latitude: currentLocation.coords.latitude,
-					longitude: currentLocation.coords.longitude,
+					latitude: selectedSale ? selectedSale.latitude : currentLocation.coords.latitude,
+					longitude: selectedSale? selectedSale.longitude : currentLocation.coords.longitude,
 					longitudeDelta: 0.15,
 					latitudeDelta: 0.15
 				}} >
@@ -86,6 +86,11 @@ const GarageSaleMap = ({ navigation }) => {
 		);
 	};
 
+	const selectMap = () => {
+		setSelectedSale(undefined);
+		setMapStyle('full');
+	}
+
 	const setSale = (sale) => {
 		setSelectedSale(sale);
 		setMapStyle('half');
@@ -99,7 +104,7 @@ const GarageSaleMap = ({ navigation }) => {
 				<View style={styles.selectedHeader}>
 					<View>
 						<Text>Title: {selectedSale.title}</Text>
-						<Text style={{maxWidth: '80%'}}>Address: {selectedSale.address}</Text>
+						<Text style={{maxWidth: '70%'}}>Address: {selectedSale.address}</Text>
 					</View>
 					<View>
 						<Text>Start: {selectedSale.startDate}</Text>
@@ -114,7 +119,7 @@ const GarageSaleMap = ({ navigation }) => {
             icons.map((item, index) => {
               return (
                 <View key={index} style={styles.iconRow}>
-                  <Icon size={30} iconStyle={{width: 150}} name={item.icon} type={item.type} />
+                  <Icon size={30} name={item.icon} type={item.type} />
                   <Text>{item.text}</Text>
                 </View>
               )
