@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Dimensions, ActivityIndicator, Alert, Text } from 'react-native'
+import { StyleSheet, View, Dimensions, ActivityIndicator, Alert, Text, ScrollView } from 'react-native'
 import { Icon } from 'react-native-elements';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
@@ -100,39 +100,41 @@ const GarageSaleMap = ({ navigation }) => {
 		const icons = getSaleIcons(selectedSale);
 
 		return (
-			<View style={styles.selectedContainer}>
-				<View style={styles.selectedHeader}>
-					<View>
-						<Text>Title: {selectedSale.title}</Text>
-						<Text style={{maxWidth: '70%'}}>Address: {selectedSale.address}</Text>
+			<ScrollView style={{flex: 0.3}}>
+				<View style={styles.selectedContainer}>
+					<View style={styles.selectedHeader}>
+						<View>
+							<Text>Title: {selectedSale.title}</Text>
+							<Text style={{maxWidth: '70%'}}>Address: {selectedSale.address}</Text>
+						</View>
+						<View>
+							<Text>Start: {selectedSale.startDate}</Text>
+							<Text>End: {selectedSale.endDate}</Text>
+							{
+								// TODO: Consider having the user's provide a username instead of email.
+							}
+							<Text>By: {selectedSale.user ? selectedSale.user : 'Unknown'}</Text>
+						</View>
 					</View>
-					<View>
-						<Text>Start: {selectedSale.startDate}</Text>
-						<Text>End: {selectedSale.endDate}</Text>
-						{
-							// TODO: Consider having the user's provide a username instead of email.
+					{
+							icons.map((item, index) => {
+								return (
+									<View key={index} style={styles.iconRow}>
+										<Icon size={30} name={item.icon} type={item.type} />
+										<Text>{item.text}</Text>
+									</View>
+								)
+							})
 						}
-						<Text>By: {selectedSale.user ? selectedSale.user : 'Unknown'}</Text>
-					</View>
 				</View>
-				{
-            icons.map((item, index) => {
-              return (
-                <View key={index} style={styles.iconRow}>
-                  <Icon size={30} name={item.icon} type={item.type} />
-                  <Text>{item.text}</Text>
-                </View>
-              )
-            })
-          }
-			</View>
+			</ScrollView>
 		);
 	};
 
 	return (
 		<View style={styles.container}>
 			{ currentLocation && salesNearMe ? 
-				<View>
+				<View style={{flex: 1}}>
 					<RenderMap />
 					{
 						mapStyle === 'half' && selectedSale ? 
@@ -153,12 +155,10 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	mapFull: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height
+		flex: 1
   },
 	mapHalf: {
-		width: Dimensions.get('window').width,
-    height: (Dimensions.get('window').height / 2)
+		flex: 0.7
 	},
 	selectedContainer: {
 		margin: 8
